@@ -4,11 +4,14 @@ package org.example;
 import lombok.SneakyThrows;
 
 import java.lang.invoke.SerializedLambda;
+import java.util.HashMap;
+import java.util.Map;
 
 public class ObjectFactory {
 
+
     private static ObjectFactory ourInstance = new ObjectFactory();
-    private Config config = new JavaConfig("org.example");
+    private Config config;
 
 
     public static ObjectFactory getInstance() {
@@ -16,7 +19,8 @@ public class ObjectFactory {
     }
 
 
-    private ObjectFactory() {
+    private ObjectFactory( ) {
+        config = new JavaConfig("org.example", new HashMap<>(Map.of(Policeman.class, GoodPoliceman.class)));
     }
 
 

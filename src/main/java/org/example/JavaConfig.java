@@ -2,24 +2,31 @@ package org.example;
 
 import org.reflections.Reflections;
 
+import java.util.Map;
 import java.util.Set;
 
 public class JavaConfig implements Config {
 
     private Reflections scanner;
+    private Map<Class, Class> ifc2ImplClass;
 
-    public JavaConfig(String packageToScan) {
+    public JavaConfig(String packageToScan, Map<Class, Class> ifc2ImplClass) {
+        this.ifc2ImplClass = ifc2ImplClass;
         this.scanner = new Reflections(packageToScan);
     }
 
     @Override
     public <T> Class<? extends T> getImplClass(Class<T> ifc) {
-        // получает все классы, которые реализуют данный интерфейс
-        Set<Class<? extends T>> classes = scanner.getSubTypesOf(ifc);
+      /*  computeIfAbsent — метод Map, который вычисляет и вставляет значение в карту, если ключ отсутствует.
+        Если ключ уже присутствует, он возвращает соответствующее значение без вычисления нового.*/
+       return ifc2ImplClass.computeIfAbsent(ifc, aClass -> {
+            // получает все классы, которые реализуют данный интерфейс
+            Set<Class<? extends T>> classes = scanner.getSubTypesOf(ifc);
+            if(classes.size() != 1){
+                throw new RuntimeException(ifc + " has 0 or more than one impl please update your config");
+            }
+            return classes.iterator().next();
+        });
 
-        if(classes.size() != 1){
-            throw new RuntimeException(ifc + "has 0 or more than one impl");
-        }
-        return classes.iterator().next();
     }
 }
