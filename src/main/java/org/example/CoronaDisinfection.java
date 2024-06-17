@@ -2,12 +2,14 @@ package org.example;
 
 public class CoronaDisinfection {
 
+    private Announcer announcer = new ConsoleAnnouncer();
+    public  Policeman policemen = new GoodPoliceman();
 
     public void start(Room room){
-        // todo сообщить всем пресудствующим что нужно покинуть комнату
-        // todo разогнать всех кто не вышел из комнаты
+        announcer.announce("Начинаентся дизинфекция. Выйдите из комнаты");
+        policemen.makePeopleLeaveRoom();
         disinfect(room);
-        // todo сообщить все что они могу вернуться в комнату
+        announcer.announce("Рескните вернуться туда обратно");
     }
 
     private void disinfect(Room room){
