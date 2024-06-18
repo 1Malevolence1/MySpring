@@ -1,5 +1,7 @@
 package org.example;
 
+
+@Singleton
 public class Recommendator {
 
     @InjectProperty("wisky")
